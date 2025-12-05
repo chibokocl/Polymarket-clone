@@ -8,6 +8,8 @@ import { useData } from "../contexts/DataContext";
 import styles from "../styles/Home.module.css";
 import ChartContainer from "../components/Chart/ChartContainer";
 
+import { getMarketMetadata } from "../utils/marketMetadata";
+
 export interface MarketProps {
   id: string;
   title: string;
@@ -15,11 +17,17 @@ export interface MarketProps {
   totalAmount: string;
   totalYes: string;
   totalNo: string;
+  category?: string;
+  tags?: string[];
 }
 
 export default function Home() {
   const { polymarket, account, loadWeb3, loading } = useData();
   const [markets, setMarkets] = useState<MarketProps[]>([]);
+  const [filteredMarkets, setFilteredMarkets] = useState<MarketProps[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterCategory, setFilterCategory] = useState("All");
+  const [sortBy, setSortBy] = useState("Volume");
 
   type PredictionOption = {
     range: string;
@@ -221,6 +229,7 @@ export default function Home() {
     var dataArray: MarketProps[] = [];
     for (var i = 0; i < totalQuestions; i++) {
       var data = await polymarket.methods.questions(i).call({ from: account });
+      const metadata = getMarketMetadata(data.id);
       dataArray.push({
         id: data.id,
         title: data.question,
@@ -228,10 +237,43 @@ export default function Home() {
         totalAmount: data.totalAmount,
         totalYes: data.totalYesAmount,
         totalNo: data.totalNoAmount,
+        category: metadata.category,
+        tags: metadata.tags,
       });
     }
     setMarkets(dataArray);
+    setFilteredMarkets(dataArray);
   }, [account, polymarket]);
+
+  useEffect(() => {
+    let result = [...markets];
+
+    // Search
+    if (searchQuery) {
+      const lowerQuery = searchQuery.toLowerCase();
+      result = result.filter(
+        (m) =>
+          m.title.toLowerCase().includes(lowerQuery) ||
+          m.tags?.some((t) => t.toLowerCase().includes(lowerQuery))
+      );
+    }
+
+    // Filter
+    if (filterCategory !== "All") {
+      result = result.filter((m) => m.category === filterCategory);
+    }
+
+    // Sort
+    if (sortBy === "Volume") {
+      result.sort(
+        (a, b) => parseFloat(b.totalAmount) - parseFloat(a.totalAmount)
+      );
+    } else if (sortBy === "Newest") {
+      result.sort((a, b) => parseInt(b.id) - parseInt(a.id));
+    }
+
+    setFilteredMarkets(result);
+  }, [markets, searchQuery, filterCategory, sortBy]);
 
   useEffect(() => {
     loadWeb3().then(() => {
@@ -269,20 +311,22 @@ export default function Home() {
               className="w-full py-3 px-3 text-base text-gray-700 bg-white rounded-full pl-10 focus:outline-none shadow-sm focus:ring-2 focus:ring-cyanbrand focus:ring-opacity-80"
               placeholder="Search markets..."
               autoComplete="off"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
           <div className="flex flex-row space-x-2 md:space-x-5 items-center flex-wrap mt-4">
             <Filter
-              list={["All", "Crypto", "Football", "Covid 19", "Politics"]}
-              activeItem="All"
+              list={["All", "Crypto", "Politics", "Sports", "Science", "Weather"]}
+              activeItem={filterCategory}
               category="Category"
-              onChange={() => {}}
+              onChange={setFilterCategory}
             />
             <Filter
-              list={["Volume", "Newest", "Expiring"]}
-              activeItem="Volume"
+              list={["Volume", "Newest"]}
+              activeItem={sortBy}
               category="Sort By"
-              onChange={() => {}}
+              onChange={setSortBy}
             />
           </div>
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -291,7 +335,7 @@ export default function Home() {
                 Total Markets
               </span>
               <span className="mt-1 text-xl font-semibold text-gray-900 number-mono">
-                {markets.length}
+                {filteredMarkets.length}
               </span>
             </div>
             <div className="rounded-2xl bg-white/90 border border-cobalt-soft px-4 py-3 shadow-sm flex flex-col">
@@ -400,7 +444,7 @@ export default function Home() {
               {/* Featured market with chart, similar to Kalshi hero card */}
               <div className="mb-5 rounded-2xl border border-cobalt-soft bg-white shadow-sm overflow-hidden flex flex-col lg:flex-row">
                 {(() => {
-                  const featured = markets[0];
+                  const featured = filteredMarkets[0];
                   const totalAmountNum = parseFloat(
                     Web3.utils.fromWei(featured.totalAmount || "0", "ether")
                   );
@@ -473,7 +517,7 @@ export default function Home() {
 
               {/* Remaining markets grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {markets.slice(1).map((market) => {
+                {filteredMarkets.slice(1).map((market) => {
                   return (
                     <MarketCard
                       id={market.id}
@@ -483,6 +527,8 @@ export default function Home() {
                       totalYes={market.totalYes}
                       totalNo={market.totalNo}
                       imageHash={market.imageHash}
+                      category={market.category}
+                      tags={market.tags}
                     />
                   );
                 })}

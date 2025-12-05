@@ -9,7 +9,7 @@ function Navbar() {
 
   return (
     <>
-      <nav className="w-full h-20 mt-auto max-w-5xl sticky top-0 z-40">
+      <nav className="w-full h-20 mt-4 mx-auto max-w-7xl sticky top-2 z-50 px-2 sm:px-4">
         <div className="flex flex-row justify-between items-center h-full px-4 rounded-2xl bg-brand-gradient shadow-brand-soft">
           <Link href="/" passHref>
             <span className="font-semibold text-2xl cursor-pointer bg-clip-text text-transparent bg-gradient-to-r from-white via-cyanbrand to-cyan-100 tracking-tight">
@@ -23,6 +23,11 @@ function Navbar() {
                   title="Market"
                   isActive={router.asPath === "/"}
                   url={"/"}
+                />
+                <TabButton
+                  title="For You"
+                  isActive={router.asPath === "/foryou"}
+                  url={"/foryou"}
                 />
                 <TabButton
                   title="Portfolio"

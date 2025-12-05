@@ -3,6 +3,7 @@ import Link from "next/link";
 import React from "react";
 import Web3 from "web3";
 import { MarketProps } from "../pages";
+import { CATEGORY_COLORS } from "../utils/marketMetadata";
 
 export const MarketCard: React.FC<MarketProps> = ({
   id,
@@ -11,6 +12,8 @@ export const MarketCard: React.FC<MarketProps> = ({
   totalYes,
   totalNo,
   imageHash,
+  category = "General",
+  tags = [],
 }) => {
   return (
     <div className="w-full overflow-hidden my-2">
@@ -25,9 +28,20 @@ export const MarketCard: React.FC<MarketProps> = ({
                 height={100}
               />
             </div>
-            <span className="text-sm font-semibold text-gray-900 leading-snug line-clamp-3">
-              {title}
-            </span>
+            <div className="flex flex-col space-y-1">
+              <div className="flex items-center space-x-2">
+                <span
+                  className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md ${
+                    CATEGORY_COLORS[category] || "bg-gray-100 text-gray-600"
+                  }`}
+                >
+                  {category}
+                </span>
+              </div>
+              <span className="text-sm font-semibold text-gray-900 leading-snug line-clamp-3">
+                {title}
+              </span>
+            </div>
           </div>
           <div className="flex flex-row flex-nowrap justify-between items-center mt-auto">
             <div className="flex flex-col space-y-1">
