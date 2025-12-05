@@ -44,22 +44,28 @@ const Markets: React.FC = () => {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <Navbar />
-        <div className="w-full max-w-5xl m-auto">
+        <div className="w-full max-w-5xl m-auto flex items-center justify-between mt-4 px-2">
           <Link href="/admin">
             <a
               type="button"
-              className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+              className="inline-flex justify-center px-4 py-2 text-sm font-medium text-cobalt bg-white bg-opacity-80 border border-cobalt-soft rounded-full shadow-sm hover:bg-cobalt-soft focus:outline-none focus-visible:ring-2 focus-visible:ring-cyanbrand focus-visible:ring-offset-0 transition"
               onClick={() => {}}
             >
               Back
             </a>
           </Link>
+          <span className="text-sm text-gray-500">
+            Resolve markets once outcomes are known.
+          </span>
         </div>
 
-        <main className="w-full flex flex-row flex-wrap py-4 max-w-5xl pb-6">
+        <main className="w-full flex flex-row flex-wrap py-6 max-w-5xl pb-6">
           {markets &&
             markets.map((market) => (
-              <div key={market.id} className="w-1/2 pr-2">
+              <div
+                key={market.id}
+                className="w-full md:w-1/2 pr-0 md:pr-2 mb-4"
+              >
                 <AdminMarketCard
                   id={market.id}
                   imageHash={market.imageHash}

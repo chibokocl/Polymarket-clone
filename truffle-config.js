@@ -1,6 +1,14 @@
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const fs = require("fs");
-const mnemonic = fs.readFileSync(".secret").toString().trim();
+
+// Only read mnemonic for matic network
+const getMnemonic = () => {
+  try {
+    return fs.readFileSync(".secret").toString().trim();
+  } catch (e) {
+    return "";
+  }
+};
 
 module.exports = {
   networks: {
@@ -12,7 +20,7 @@ module.exports = {
     matic: {
       provider: () =>
         new HDWalletProvider(
-          mnemonic,
+          getMnemonic(),
           `https://matic-mumbai.chainstacklabs.com`
         ),
       network_id: 80001,

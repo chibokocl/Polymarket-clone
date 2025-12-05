@@ -9,16 +9,16 @@ function Navbar() {
 
   return (
     <>
-      <nav className="w-full h-16 mt-auto max-w-5xl">
-        <div className="flex flex-row justify-between items-center h-full">
+      <nav className="w-full h-20 mt-auto max-w-5xl sticky top-0 z-40">
+        <div className="flex flex-row justify-between items-center h-full px-4 rounded-2xl bg-brand-gradient shadow-brand-soft">
           <Link href="/" passHref>
-            <span className="font-semibold text-xl cursor-pointer">
+            <span className="font-semibold text-2xl cursor-pointer bg-clip-text text-transparent bg-gradient-to-r from-white via-cyanbrand to-cyan-100 tracking-tight">
               Polymarket
             </span>
           </Link>
           {!router.asPath.includes("/market") &&
             !router.asPath.includes("/admin") && (
-              <div className="flex flex-row items-center justify-center h-full">
+              <div className="flex flex-row items-center justify-center h-full space-x-1 bg-white bg-opacity-10 rounded-full px-1 py-0.5">
                 <TabButton
                   title="Market"
                   isActive={router.asPath === "/"}
@@ -32,19 +32,19 @@ function Navbar() {
               </div>
             )}
           {account ? (
-            <div className="bg-green-500 px-6 py-2 rounded-md cursor-pointer">
-              <span className="text-lg text-white">
+            <div className="px-5 py-2 rounded-full cursor-default bg-white bg-opacity-10 border border-cyanbrand/60 shadow-brand-card">
+              <span className="text-sm text-white number-mono tracking-wide">
                 {account.substr(0, 10)}...
               </span>
             </div>
           ) : (
             <div
-              className="bg-green-500 px-6 py-2 rounded-md cursor-pointer"
+              className="px-6 py-2 rounded-full cursor-pointer cta-primary shadow-brand-card text-sm font-semibold text-white tracking-wide"
               onClick={() => {
                 loadWeb3();
               }}
             >
-              <span className="text-lg text-white">Connect</span>
+              <span>Connect Wallet</span>
             </div>
           )}
         </div>
@@ -67,10 +67,10 @@ const TabButton = ({
   return (
     <Link href={url} passHref>
       <div
-        className={`h-full px-4 flex items-center border-b-2 font-semibold hover:border-blue-700 hover:text-blue-700 cursor-pointer ${
+        className={`h-9 px-4 flex items-center text-sm font-semibold rounded-full cursor-pointer transition-all ${
           isActive
-            ? "border-blue-700 text-blue-700 text-lg font-semibold"
-            : "border-white text-gray-400 text-lg"
+            ? "tab-gradient-active shadow-brand-card"
+            : "text-white text-opacity-70 hover:text-white hover:bg-white hover:bg-opacity-10"
         }`}
       >
         <span>{title}</span>

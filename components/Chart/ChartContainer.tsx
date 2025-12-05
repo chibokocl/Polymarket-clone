@@ -1,5 +1,4 @@
-import Plotly from "plotly.js-dist-min";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Web3 from "web3";
 import { useData } from "../../contexts/DataContext";
 
@@ -14,8 +13,15 @@ interface ChartData {
 
 const ChartContainer: React.FC<Props> = ({ questionId }) => {
   const { polymarket } = useData();
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   const fetchGraphData = async () => {
+    if (!polymarket || !containerRef.current) return;
+    if (typeof window === "undefined") return;
+
+    // Load Plotly only on the client to avoid SSR issues with `self`
+    const Plotly = require("plotly.js-dist-min");
+
     var data = await polymarket.methods.getGraphData(questionId).call();
     var yesData: ChartData = {
       time: [],
@@ -56,19 +62,23 @@ const ChartContainer: React.FC<Props> = ({ questionId }) => {
     var chartData = [yes, no];
 
     var layout = {
-      title: "YES / NO Graph",
+      margin: { t: 20, r: 10, b: 30, l: 30 },
+      legend: { orientation: "h", y: -0.2 },
     };
 
-    Plotly.newPlot("myDiv", chartData, layout, { displayModeBar: false });
+    await Plotly.newPlot(containerRef.current, chartData, layout, {
+      displayModeBar: false,
+      responsive: true,
+    });
   };
 
   useEffect(() => {
     fetchGraphData();
-  });
+  }, [questionId, polymarket]);
 
   return (
     <>
-      <div id="myDiv"></div>
+      <div ref={containerRef} className="w-full h-full" />
     </>
   );
 };

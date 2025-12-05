@@ -115,17 +115,22 @@ const Portfolio = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
-      <main className="w-full flex flex-col sm:flex-row flex-wrap sm:flex-nowrap py-4 flex-grow max-w-5xl">
+      <main className="w-full flex flex-col sm:flex-row flex-wrap sm:flex-nowrap py-6 flex-grow max-w-5xl">
         <div className="w-full flex flex-col pt-1">
-          <div className="p-10 bg-blue-700 rounded-lg flex flex-row justify-evenly">
+          <div className="p-10 rounded-2xl flex flex-row justify-evenly bg-brand-gradient text-white shadow-brand-card">
             <div className="flex flex-col items-center">
               <h1 className="text-white opacity-50 text-lg">Portfolio Value</h1>
               <h1 className="text-white text-4xl font-bold">
-                {Web3.utils.fromWei(portfolioValue.toString())} POLY
+                <span className="number-mono">
+                  {Web3.utils.fromWei(portfolioValue.toString())}
+                </span>{" "}
+                POLY
               </h1>
             </div>
           </div>
-          <span className="font-bold my-3 text-lg">Your Market Positions</span>
+          <span className="font-bold my-3 text-lg text-gray-900">
+            Your Market Positions
+          </span>
           {markets.map((market) => (
             <PortfolioMarketCard
               id={market.id}

@@ -52,8 +52,8 @@ export const useProviderData = () => {
   const loadBlockchainData = async () => {
     const web3 = window.web3;
 
-    const polymarketData = Polymarket.networks["80001"];
-    const polyTokenData = PolyToken.networks["80001"];
+    const polymarketData = Polymarket.networks["5777"];
+    const polyTokenData = PolyToken.networks["5777"];
 
     if (polymarketData && polyTokenData) {
       var tempContract = await new web3.eth.Contract(

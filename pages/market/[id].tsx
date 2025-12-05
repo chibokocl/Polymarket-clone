@@ -88,7 +88,7 @@ const Details = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
-      <main className="w-full flex flex-col sm:flex-row py-4 max-w-5xl">
+      <main className="w-full flex flex-col sm:flex-row py-6 max-w-5xl">
         {dataLoading ? (
           <div className="flex flex-col justify-center items-center h-full w-full pt-10">
             <div className="text-center">
@@ -97,67 +97,73 @@ const Details = () => {
           </div>
         ) : (
           <div className="w-full flex flex-col pt-1">
-            <div className="p-6 rounded-lg flex flex-row justify-start border border-gray-300">
-              <div className="flex flex-row">
-                <div className="h-w-15 pr-4">
-                  <Img
-                    src={`https://ipfs.infura.io/ipfs/${market?.imageHash}`}
-                    className="rounded-full"
-                    width={55}
-                    height={55}
-                  />
+            <div className="p-4 md:p-6 rounded-2xl border border-cobalt-soft bg-white/95 backdrop-blur-sm shadow-sm flex flex-col lg:flex-row gap-6">
+              <div className="flex flex-col space-y-4 lg:w-2/5">
+                <div className="flex flex-row items-center">
+                  <div className="h-w-15 pr-4 rounded-full bg-cyanbrand-soft flex items-center justify-center overflow-hidden">
+                    <Img
+                      src={`https://ipfs.infura.io/ipfs/${market?.imageHash}`}
+                      className="rounded-full"
+                      width={55}
+                      height={55}
+                    />
+                  </div>
+                  <div className="flex flex-col justify-start space-y-1">
+                    <span className="text-xs font-light text-gray-500">
+                      Prediction market
+                    </span>
+                    <span className="text-base md:text-lg font-semibold text-gray-900">
+                      {market?.title}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex flex-col justify-start w-1/2 space-y-1">
-                  <span className="text-xs font-light text-gray-500 whitespace-nowrap">
-                    US curreny affairs
-                  </span>
-                  <span className="text-lg font-semibold whitespace-nowrap">
-                    {market?.title}
-                  </span>
+                <div className="flex flex-row items-center space-x-3">
+                  <div className="flex flex-col justify-start bg-cyanbrand-soft px-3 py-2 rounded-xl">
+                    <span className="text-[11px] font-light text-gray-600 whitespace-nowrap">
+                      Ends on
+                    </span>
+                    <span className="text-sm font-semibold text-cobalt whitespace-nowrap">
+                      {market?.endTimestamp
+                        ? moment(
+                            parseInt((market?.endTimestamp).toFixed(0))
+                          ).format("MMM D, YYYY")
+                        : "N/A"}
+                    </span>
+                  </div>
+                  <div className="flex flex-col justify-start bg-cobalt-soft px-3 py-2 rounded-xl">
+                    <span className="text-[11px] font-light text-gray-600 whitespace-nowrap">
+                      Total volume
+                    </span>
+                    <span className="text-sm font-semibold text-gray-900 whitespace-nowrap number-mono">
+                      {Web3.utils.fromWei(
+                        market?.totalAmount.toString() ?? "0",
+                        "ether"
+                      ) ?? 0}{" "}
+                      POLY
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div className="flex flex-row items-center space-x-4 ml-3">
-                <div className="flex flex-col justify-start bg-gray-100 p-3">
-                  <span className="text-xs font-light text-gray-500 whitespace-nowrap">
-                    Market End on
-                  </span>
-                  <span className="text-base font-semibold text-black whitespace-nowrap">
-                    {market?.endTimestamp
-                      ? moment(
-                          parseInt((market?.endTimestamp).toFixed(0))
-                        ).format("MMMM D, YYYY")
-                      : "N/A"}
-                  </span>
-                </div>
-                <div className="flex flex-col justify-start bg-gray-100 p-3">
-                  <span className="text-xs font-light text-gray-500 whitespace-nowrap">
-                    Total Volume
-                  </span>
-                  <span className="text-base font-semibold text-black whitespace-nowrap">
-                    {Web3.utils.fromWei(
-                      market?.totalAmount.toString() ?? "0",
-                      "ether"
-                    ) ?? 0}{" "}
-                    POLY
-                  </span>
-                </div>
+              <div className="flex-1 border border-cobalt-soft rounded-2xl p-2 bg-white shadow-sm">
+                <ChartContainer questionId={market?.id ?? "0"} />
               </div>
             </div>
-            <div className="flex flex-col space-y-3">
-              <div className="w-full flex flex-row mt-5">
-                <div className="w-2/3 border rounded-lg p-1 pb-4 border-gray-300 mr-2">
-                  <ChartContainer questionId={market?.id ?? "0"} />
-                </div>
-                <div className="w-1/3 rounded-lg border border-gray-300 ml-2">
+            <div className="flex flex-col space-y-3 mt-5">
+              <div className="w-full flex flex-col lg:flex-row gap-4">
+                <div className="w-full lg:w-1/3 rounded-2xl border border-cobalt-soft bg-white/95 shadow-sm">
                   <div className="flex flex-col items-start p-6">
-                    <span className="text-lg font-bold m-auto pb-2">Buy</span>
+                    <span className="text-lg font-bold m-auto pb-2 text-gray-900">
+                      Buy
+                    </span>
                     <hr className="text-black w-full py-2" />
-                    <span className="text-base">Pick Outcome</span>
+                    <span className="text-base text-gray-700">
+                      Pick Outcome
+                    </span>
                     <div
-                      className={`w-full py-2 px-2 ${
+                      className={`w-full py-2 px-2 rounded-xl border ${
                         selected == "YES"
-                          ? "bg-green-500 text-white"
-                          : "bg-gray-100"
+                          ? "bg-cobalt text-white border-transparent shadow-brand-card"
+                          : "bg-cobalt-soft border-transparent text-gray-800"
                       } mt-2 cursor-pointer`}
                       onClick={() => setSelected("YES")}
                     >
@@ -171,10 +177,10 @@ const Details = () => {
                       %
                     </div>
                     <div
-                      className={`w-full py-2 px-2 ${
+                      className={`w-full py-2 px-2 rounded-xl border ${
                         selected == "NO"
-                          ? "bg-green-500 text-white"
-                          : "bg-gray-100"
+                          ? "bg-lapis text-white border-transparent shadow-brand-card"
+                          : "bg-cobalt-soft border-transparent text-gray-800"
                       } mt-2 cursor-pointer`}
                       onClick={() => setSelected("NO")}
                     >
@@ -187,26 +193,28 @@ const Details = () => {
                           ).toFixed(2)}
                       %
                     </div>
-                    <span className="text-sm mt-5 mb-4">How much?</span>
-                    <div className="w-full border border-gray-300 flex flex-row items-center">
+                    <span className="text-sm mt-5 mb-2 text-gray-700">
+                      How much?
+                    </span>
+                    <div className="w-full border border-cobalt-soft flex flex-row items-center rounded-xl overflow-hidden bg-white">
                       <input
                         type="search"
                         name="q"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        className="w-full py-2 px-2 text-base text-gray-700 border-gray-300 rounded-md focus:outline-none"
+                        className="w-full py-2 px-2 text-base text-gray-700 focus:outline-none number-mono"
                         placeholder="0"
                         autoComplete="off"
                       />
-                      <span className="whitespace-nowrap text-sm font-semibold">
+                      <span className="whitespace-nowrap text-xs font-semibold text-gray-500 px-1">
                         POLY |{" "}
                       </span>
-                      <span className="text-sm font-semibold text-blue-700 mx-2 underline cursor-pointer">
+                      <span className="text-xs font-semibold text-cyanbrand mx-2 underline cursor-pointer">
                         Max
                       </span>
                     </div>
                     <button
-                      className="mt-5 rounded-lg py-3 text-center w-full bg-blue-700 text-white"
+                      className="mt-5 rounded-full py-3 text-center w-full cta-primary text-white font-semibold shadow-brand-card disabled:opacity-60"
                       onClick={handleTrade}
                       disabled={button !== "Trade"}
                     >
@@ -214,18 +222,18 @@ const Details = () => {
                     </button>
                   </div>
                 </div>
-              </div>
-              <div className="w-2/3 flex flex-col">
-                <span className="text-base font-semibold py-3">
-                  Description
-                </span>
-                <span>{market?.description}</span>
-                <span className="text-base my-3 py-2 bg-gray-100 rounded-xl px-3">
-                  Resolution Source :{" "}
-                  <a className="text-blue-700" href={market?.resolverUrl}>
-                    {market?.resolverUrl}
-                  </a>
-                </span>
+                <div className="w-full lg:flex-1 flex flex-col">
+                  <span className="text-base font-semibold py-3">
+                    Description
+                  </span>
+                  <span>{market?.description}</span>
+                  <span className="text-base my-3 py-2 bg-gray-100 rounded-xl px-3">
+                    Resolution Source :{" "}
+                    <a className="text-blue-700" href={market?.resolverUrl}>
+                      {market?.resolverUrl}
+                    </a>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
