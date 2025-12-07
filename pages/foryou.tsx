@@ -173,11 +173,14 @@ export default function ForYou() {
   }, [account, polymarket]);
 
   useEffect(() => {
-    loadWeb3().then(() => {
-      // Attempt to fetch markets, but don't block UI
-      if (!loading) getMarkets();
-    });
-  }, [loading]);
+    loadWeb3();
+  }, []);
+
+  useEffect(() => {
+    if (!loading && polymarket) {
+      getMarkets();
+    }
+  }, [loading, polymarket]);
 
   // Derived lists
   // Always show dummy markets if real markets are empty
