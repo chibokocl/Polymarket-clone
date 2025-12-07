@@ -1,10 +1,11 @@
 import React from "react";
 import Link from "next/link";
 import Web3 from "web3";
-import Img from "next/image";
+
 import HeroChart from "./HeroChart";
 import { MarketProps } from "../pages";
 import { CATEGORY_COLORS } from "../utils/marketMetadata";
+import { formatCurrency } from "../utils/formatters";
 
 interface Props {
   market: MarketProps;
@@ -33,10 +34,13 @@ export const HeroSection: React.FC<Props> = ({ market }) => {
         <div>
           <div className="flex items-center space-x-2 mb-4">
             <div className="w-10 h-10 rounded-md bg-gray-100 overflow-hidden relative">
-               <Img
+               <img
                 src={`https://ipfs.infura.io/ipfs/${market.imageHash}`}
-                layout="fill"
-                objectFit="cover"
+                className="w-full h-full object-cover"
+                alt={market.title}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "https://via.placeholder.com/40";
+                }}
               />
             </div>
             <div className="flex flex-col">
@@ -85,10 +89,13 @@ export const HeroSection: React.FC<Props> = ({ market }) => {
         </div>
 
         <div className="mt-6 pt-4">
-           <div className="flex items-center justify-between text-xs text-gray-500">
-             <span>Vol: <span className="font-mono text-gray-900 font-medium">${totalAmountNum.toFixed(2)}</span></span>
-           </div>
-        </div>
+          <div className="flex items-center space-x-1 text-xs text-gray-500 mt-3">
+             <span className="font-medium">Volume:</span>
+             <span className="text-gray-900 font-bold number-mono">
+               {formatCurrency(parseFloat(Web3.utils.fromWei(market.totalAmount, "ether")))}
+             </span>
+          </div>
+      </div>
       </div>
 
       {/* Right Side: Chart */}

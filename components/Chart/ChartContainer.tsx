@@ -51,6 +51,7 @@ const ChartContainer: React.FC<Props> = ({ questionId }) => {
       y: [...yesData.amount],
       mode: "lines+markers",
       name: "Yes",
+      line: { color: "#16a34a" }, // Green 600
     };
 
     var no = {
@@ -58,6 +59,7 @@ const ChartContainer: React.FC<Props> = ({ questionId }) => {
       y: [...noData.amount],
       mode: "lines+markers",
       name: "No",
+      line: { color: "#2563eb" }, // Blue 600
     };
     var chartData = [yes, no];
 

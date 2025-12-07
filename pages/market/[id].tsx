@@ -7,6 +7,7 @@ import Web3 from "web3";
 import ChartContainer from "../../components/Chart/ChartContainer";
 import Navbar from "../../components/Navbar";
 import { useData } from "../../contexts/DataContext";
+import { formatCurrency } from "../../utils/formatters";
 
 export interface MarketProps {
   id: string;
@@ -135,11 +136,10 @@ const Details = () => {
                       Total volume
                     </span>
                     <span className="text-sm font-semibold text-gray-900 whitespace-nowrap number-mono">
-                      {Web3.utils.fromWei(
+                      {formatCurrency(parseFloat(Web3.utils.fromWei(
                         market?.totalAmount.toString() ?? "0",
                         "ether"
-                      ) ?? 0}{" "}
-                      POLY
+                      ) ?? "0"))}
                     </span>
                   </div>
                 </div>
@@ -162,9 +162,9 @@ const Details = () => {
                     <div
                       className={`w-full py-2 px-2 rounded-xl border ${
                         selected == "YES"
-                          ? "bg-cobalt text-white border-transparent shadow-brand-card"
-                          : "bg-cobalt-soft border-transparent text-gray-800"
-                      } mt-2 cursor-pointer`}
+                          ? "bg-green-600 text-white border-transparent shadow-brand-card"
+                          : "bg-gray-100 border-transparent text-gray-800 hover:bg-gray-200"
+                      } mt-2 cursor-pointer transition-colors`}
                       onClick={() => setSelected("YES")}
                     >
                       <span className="font-bold">YES</span>{" "}
@@ -179,9 +179,9 @@ const Details = () => {
                     <div
                       className={`w-full py-2 px-2 rounded-xl border ${
                         selected == "NO"
-                          ? "bg-lapis text-white border-transparent shadow-brand-card"
-                          : "bg-cobalt-soft border-transparent text-gray-800"
-                      } mt-2 cursor-pointer`}
+                          ? "bg-blue-600 text-white border-transparent shadow-brand-card"
+                          : "bg-gray-100 border-transparent text-gray-800 hover:bg-gray-200"
+                      } mt-2 cursor-pointer transition-colors`}
                       onClick={() => setSelected("NO")}
                     >
                       <span className="font-bold">No</span>{" "}
@@ -207,7 +207,7 @@ const Details = () => {
                         autoComplete="off"
                       />
                       <span className="whitespace-nowrap text-xs font-semibold text-gray-500 px-1">
-                        POLY |{" "}
+                        TZS |{" "}
                       </span>
                       <span className="text-xs font-semibold text-cyanbrand mx-2 underline cursor-pointer">
                         Max

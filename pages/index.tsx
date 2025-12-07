@@ -9,6 +9,7 @@ import styles from "../styles/Home.module.css";
 import ChartContainer from "../components/Chart/ChartContainer";
 
 import { getMarketMetadata } from "../utils/marketMetadata";
+import { formatCurrency } from "../utils/formatters";
 
 export interface MarketProps {
   id: string;
@@ -343,7 +344,7 @@ export default function Home() {
                 24h Volume (demo)
               </span>
               <span className="mt-1 text-xl font-semibold text-gray-900 number-mono">
-                12,450 POLY
+                {formatCurrency(12450)}
               </span>
             </div>
             <div className="rounded-2xl bg-white/90 border border-cobalt-soft px-4 py-3 shadow-sm flex flex-col">
@@ -393,11 +394,11 @@ export default function Home() {
                             {opt.probability}%
                           </span>
                         </div>
-                        <div className="flex">
-                          <button className="flex-1 h-8 bg-cobalt text-white text-xs font-medium hover:bg-lapis transition-colors">
+                        <div className="flex space-x-2">
+                          <button className="flex-1 h-8 bg-green-600 text-white text-xs font-medium hover:bg-green-700 transition-colors rounded-md">
                             Yes
                           </button>
-                          <button className="flex-1 h-8 bg-red-600 text-white text-xs font-medium hover:bg-red-700 transition-colors">
+                          <button className="flex-1 h-8 bg-blue-600 text-white text-xs font-medium hover:bg-blue-700 transition-colors rounded-md">
                             No
                           </button>
                         </div>
@@ -409,7 +410,7 @@ export default function Home() {
                       <div>
                         <div className="text-[11px] text-gray-500">Volume</div>
                         <div className="text-xs number-mono text-gray-900">
-                          {formatVolume(pred.volume)}
+                          {formatCurrency(pred.volume)}
                         </div>
                       </div>
                       <div>
@@ -480,7 +481,7 @@ export default function Home() {
                         </div>
                         <div className="mt-4 space-y-3">
                           <div className="grid grid-cols-2 gap-2">
-                            <div className="rounded-lg bg-cobalt text-white px-3 py-2 flex flex-col">
+                            <div className="rounded-lg bg-green-600 text-white px-3 py-2 flex flex-col">
                               <span className="text-[11px] uppercase tracking-wide">
                                 Yes
                               </span>
@@ -488,11 +489,11 @@ export default function Home() {
                                 {yesPct}%
                               </span>
                             </div>
-                            <div className="rounded-lg bg-gray-100 px-3 py-2 flex flex-col">
-                              <span className="text-[11px] uppercase tracking-wide text-gray-600">
+                            <div className="rounded-lg bg-blue-600 text-white px-3 py-2 flex flex-col">
+                              <span className="text-[11px] uppercase tracking-wide">
                                 No
                               </span>
-                              <span className="text-lg font-semibold text-lapis number-mono">
+                              <span className="text-lg font-semibold number-mono">
                                 {noPct}%
                               </span>
                             </div>
@@ -500,7 +501,7 @@ export default function Home() {
                           <div className="flex items-center justify-between text-[11px] text-gray-500">
                             <span>Total volume</span>
                             <span className="number-mono text-gray-900">
-                              {totalAmountNum.toFixed(2)} POLY
+                              {formatCurrency(totalAmountNum)}
                             </span>
                           </div>
                         </div>

@@ -9,7 +9,9 @@ import { MarketProps } from "./index";
 import Web3 from "web3";
 
 // Dummy Data for MVP (Moved outside component)
+// Dummy Data for MVP (Moved outside component)
 const dummyMarkets: MarketProps[] = [
+  // Politics
   {
     id: "dummy_1",
     title: "Who will Trump nominate as Fed Chair?",
@@ -21,6 +23,28 @@ const dummyMarkets: MarketProps[] = [
     tags: ["Fed", "Trump", "Economy"],
   },
   {
+    id: "dummy_5",
+    title: "Will the US government shut down in 2024?",
+    imageHash: "QmP...",
+    totalAmount: Web3.utils.toWei("2100000", "ether"),
+    totalYes: Web3.utils.toWei("840000", "ether"), // 40%
+    totalNo: Web3.utils.toWei("1260000", "ether"),
+    category: "Politics",
+    tags: ["US", "Congress"],
+  },
+  {
+    id: "dummy_6",
+    title: "Next UK Prime Minister after Sunak?",
+    imageHash: "QmU...",
+    totalAmount: Web3.utils.toWei("1500000", "ether"),
+    totalYes: Web3.utils.toWei("900000", "ether"), // 60%
+    totalNo: Web3.utils.toWei("600000", "ether"),
+    category: "Politics",
+    tags: ["UK", "Election"],
+  },
+
+  // Crypto
+  {
     id: "dummy_2",
     title: "Will Bitcoin hit $100k in 2024?",
     imageHash: "QmY...", 
@@ -30,6 +54,28 @@ const dummyMarkets: MarketProps[] = [
     category: "Crypto",
     tags: ["Bitcoin", "Price"],
   },
+  {
+    id: "dummy_7",
+    title: "Ethereum ETF approval in May?",
+    imageHash: "QmE...",
+    totalAmount: Web3.utils.toWei("8900000", "ether"),
+    totalYes: Web3.utils.toWei("7120000", "ether"), // 80%
+    totalNo: Web3.utils.toWei("1780000", "ether"),
+    category: "Crypto",
+    tags: ["Ethereum", "ETF", "SEC"],
+  },
+  {
+    id: "dummy_8",
+    title: "Solana to flip BNB market cap in 2024?",
+    imageHash: "QmS...",
+    totalAmount: Web3.utils.toWei("4500000", "ether"),
+    totalYes: Web3.utils.toWei("1350000", "ether"), // 30%
+    totalNo: Web3.utils.toWei("3150000", "ether"),
+    category: "Crypto",
+    tags: ["Solana", "BNB"],
+  },
+
+  // Sports
   {
     id: "dummy_3",
     title: "Super Bowl LIX Winner: Chiefs vs Eagles?",
@@ -41,6 +87,28 @@ const dummyMarkets: MarketProps[] = [
     tags: ["NFL", "Super Bowl"],
   },
   {
+    id: "dummy_9",
+    title: "NBA Finals 2024: Celtics to win?",
+    imageHash: "QmN...",
+    totalAmount: Web3.utils.toWei("2800000", "ether"),
+    totalYes: Web3.utils.toWei("2100000", "ether"), // 75%
+    totalNo: Web3.utils.toWei("700000", "ether"),
+    category: "Sports",
+    tags: ["NBA", "Celtics"],
+  },
+  {
+    id: "dummy_10",
+    title: "Will LeBron James retire in 2024?",
+    imageHash: "QmL...",
+    totalAmount: Web3.utils.toWei("1200000", "ether"),
+    totalYes: Web3.utils.toWei("120000", "ether"), // 10%
+    totalNo: Web3.utils.toWei("1080000", "ether"),
+    category: "Sports",
+    tags: ["NBA", "LeBron"],
+  },
+
+  // Science & Tech
+  {
     id: "dummy_4",
     title: "Will SpaceX Starship reach orbit in next launch?",
     imageHash: "QmA...",
@@ -49,6 +117,26 @@ const dummyMarkets: MarketProps[] = [
     totalNo: Web3.utils.toWei("95000", "ether"),
     category: "Science",
     tags: ["SpaceX", "Mars"],
+  },
+  {
+    id: "dummy_11",
+    title: "GPT-5 release before Q3 2024?",
+    imageHash: "QmG...",
+    totalAmount: Web3.utils.toWei("6700000", "ether"),
+    totalYes: Web3.utils.toWei("2010000", "ether"), // 30%
+    totalNo: Web3.utils.toWei("4690000", "ether"),
+    category: "Science",
+    tags: ["AI", "OpenAI"],
+  },
+  {
+    id: "dummy_12",
+    title: "Apple Vision Pro 2 announced in 2025?",
+    imageHash: "QmV...",
+    totalAmount: Web3.utils.toWei("1800000", "ether"),
+    totalYes: Web3.utils.toWei("1080000", "ether"), // 60%
+    totalNo: Web3.utils.toWei("720000", "ether"),
+    category: "Science",
+    tags: ["Apple", "VR"],
   }
 ];
 
