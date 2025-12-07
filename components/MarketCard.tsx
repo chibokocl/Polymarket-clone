@@ -16,6 +16,13 @@ export const MarketCard: React.FC<MarketProps> = ({
   category = "General",
   tags = [],
 }) => {
+  const totalAmountNum = parseFloat(Web3.utils.fromWei(totalAmount, "ether"));
+  const totalYesNum = parseFloat(Web3.utils.fromWei(totalYes, "ether"));
+  const totalNoNum = parseFloat(Web3.utils.fromWei(totalNo, "ether"));
+
+  const yesPct = totalAmountNum > 0 ? ((totalYesNum / totalAmountNum) * 100).toFixed(0) : "50";
+  const noPct = totalAmountNum > 0 ? ((totalNoNum / totalAmountNum) * 100).toFixed(0) : "50";
+
   return (
     <div className="w-full overflow-hidden my-2">
       <Link href={`/market/${id}`} passHref>
@@ -37,10 +44,9 @@ export const MarketCard: React.FC<MarketProps> = ({
               </span>
 
 
-// ...
 
               <span className="text-[10px] text-gray-400 mt-1">
-                Vol: {formatCurrency(parseFloat(Web3.utils.fromWei(totalAmount, "ether")))}
+                Vol: {formatCurrency(totalAmountNum)}
               </span>
             </div>
           </div>
@@ -49,13 +55,13 @@ export const MarketCard: React.FC<MarketProps> = ({
             <div className="flex flex-col items-center justify-center p-1.5 rounded bg-green-50 hover:bg-green-100 transition-colors">
               <span className="text-[10px] uppercase font-bold text-green-700 tracking-wider">Yes</span>
               <span className="text-sm font-bold text-green-800 number-mono">
-                {parseFloat(Web3.utils.fromWei(totalYes, "ether")).toFixed(2)}
+                {yesPct}%
               </span>
             </div>
             <div className="flex flex-col items-center justify-center p-1.5 rounded bg-blue-50 hover:bg-blue-100 transition-colors">
               <span className="text-[10px] uppercase font-bold text-blue-700 tracking-wider">No</span>
               <span className="text-sm font-bold text-blue-800 number-mono">
-                {parseFloat(Web3.utils.fromWei(totalNo, "ether")).toFixed(2)}
+                {noPct}%
               </span>
             </div>
           </div>
