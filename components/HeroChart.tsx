@@ -52,30 +52,48 @@ const HeroChart: React.FC<Props> = ({ questionId }) => {
         64, 66, 68, 70, 72, 71, 73, 75 // Week 4: Strong finish
       ];
 
-      const dataPoints = points.map((val, i) => ({
+      const dataPointsYes = points.map((val, i) => ({
         x: now - (29 - i) * day,
         y: val
+      }));
+
+      const dataPointsNo = points.map((val, i) => ({
+        x: now - (29 - i) * day,
+        y: 100 - val
       }));
       
       return {
         datasets: [
           {
-            label: "Yes Probability",
-            data: dataPoints,
-            borderColor: "#00C08B", // Kalshi Green
+            label: "Yes",
+            data: dataPointsYes,
+            borderColor: "#16a34a", // Tailwind Green 600
             backgroundColor: (context: any) => {
               const ctx = context.chart.ctx;
               const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-              gradient.addColorStop(0, "rgba(0, 192, 139, 0.15)");
-              gradient.addColorStop(1, "rgba(0, 192, 139, 0)");
+              gradient.addColorStop(0, "rgba(22, 163, 74, 0.15)");
+              gradient.addColorStop(1, "rgba(22, 163, 74, 0)");
               return gradient;
             },
-            borderWidth: 3, // Thicker line
+            borderWidth: 3,
             pointRadius: 0,
             pointHoverRadius: 6,
-            pointBackgroundColor: "#00C08B",
+            pointBackgroundColor: "#16a34a",
             fill: true,
-            tension: 0.3, // Smoother curve
+            tension: 0.3,
+          },
+          {
+            label: "No",
+            data: dataPointsNo,
+            borderColor: "#2563eb", // Tailwind Blue 600
+            backgroundColor: "transparent",
+            borderWidth: 3,
+            pointRadius: 0,
+            pointHoverRadius: 6,
+            pointBackgroundColor: "#2563eb",
+            fill: false,
+            tension: 0.3,
+            borderDash: [5, 5], // Dashed line for No to distinguish
           },
         ],
       };
@@ -90,7 +108,18 @@ const HeroChart: React.FC<Props> = ({ questionId }) => {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false,
+        display: true, // Show legend now
+        position: "top" as const,
+        align: "end" as const,
+        labels: {
+          boxWidth: 10,
+          usePointStyle: true,
+          pointStyle: "circle",
+          font: {
+            size: 11,
+            weight: "bold",
+          },
+        },
       },
       tooltip: {
         mode: "index" as const,
@@ -101,10 +130,10 @@ const HeroChart: React.FC<Props> = ({ questionId }) => {
         borderColor: "#E5E7EB",
         borderWidth: 1,
         padding: 10,
-        displayColors: false,
+        displayColors: true,
         callbacks: {
           label: function (context: any) {
-            return `${context.parsed.y.toFixed(0)}%`;
+            return `${context.dataset.label}: ${context.parsed.y.toFixed(0)}%`;
           },
         },
       },
