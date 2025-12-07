@@ -13,7 +13,7 @@ export const MarketCarousel: React.FC<Props> = ({ title, markets }) => {
 
   const scroll = (direction: "left" | "right") => {
     if (scrollContainerRef.current) {
-      const scrollAmount = 300; // Approx card width
+      const scrollAmount = 320; // Approx card width
       scrollContainerRef.current.scrollBy({
         left: direction === "left" ? -scrollAmount : scrollAmount,
         behavior: "smooth",
@@ -49,7 +49,7 @@ export const MarketCarousel: React.FC<Props> = ({ title, markets }) => {
         style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
       >
         {markets.map((market) => (
-          <div key={market.id} className="min-w-[300px] w-[300px] snap-start">
+          <div key={market.id} className="min-w-[320px] w-[320px] snap-start">
             <MarketCard {...market} />
           </div>
         ))}

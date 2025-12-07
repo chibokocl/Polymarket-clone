@@ -27,8 +27,8 @@ export const MarketCard: React.FC<MarketProps> = ({
     <div className="w-full overflow-hidden my-2">
       <Link href={`/market/${id}`} passHref>
         <div className="flex flex-col h-full bg-white rounded-lg p-3 cursor-pointer hover:shadow-md transition-shadow border border-gray-100">
-          <div className="flex flex-row space-x-3 pb-2 items-start">
-            <div className="w-8 h-8 min-w-[32px] rounded-md bg-gray-100 overflow-hidden relative">
+          <div className="flex flex-row space-x-3 pb-3 items-start">
+            <div className="w-10 h-10 min-w-[40px] rounded-md bg-gray-100 overflow-hidden relative">
               <img
                 src={`https://ipfs.infura.io/ipfs/${imageHash}`}
                 className="w-full h-full object-cover"
@@ -51,16 +51,16 @@ export const MarketCard: React.FC<MarketProps> = ({
             </div>
           </div>
           
-          <div className="mt-auto grid grid-cols-2 gap-2 pt-2">
-            <div className="flex flex-col items-center justify-center p-1.5 rounded bg-green-50 hover:bg-green-100 transition-colors">
-              <span className="text-[10px] uppercase font-bold text-green-700 tracking-wider">Yes</span>
-              <span className="text-sm font-bold text-green-800 number-mono">
+          <div className="mt-auto grid grid-cols-2 gap-2 pt-2 border-t border-gray-50">
+            <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-green-50 border border-green-100 hover:bg-green-100 transition-all group">
+              <span className="text-[10px] uppercase font-bold text-green-600 tracking-wider mb-0.5">Yes</span>
+              <span className="text-base font-bold text-green-700 number-mono group-hover:scale-105 transition-transform">
                 {yesPct}%
               </span>
             </div>
-            <div className="flex flex-col items-center justify-center p-1.5 rounded bg-blue-50 hover:bg-blue-100 transition-colors">
-              <span className="text-[10px] uppercase font-bold text-blue-700 tracking-wider">No</span>
-              <span className="text-sm font-bold text-blue-800 number-mono">
+            <div className="flex flex-col items-center justify-center p-2 rounded-lg bg-blue-50 border border-blue-100 hover:bg-blue-100 transition-all group">
+              <span className="text-[10px] uppercase font-bold text-blue-600 tracking-wider mb-0.5">No</span>
+              <span className="text-base font-bold text-blue-700 number-mono group-hover:scale-105 transition-transform">
                 {noPct}%
               </span>
             </div>
