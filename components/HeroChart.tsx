@@ -38,126 +38,52 @@ const HeroChart: React.FC<Props> = ({ questionId }) => {
   const [chartData, setChartData] = useState<any>(null);
 
   useEffect(() => {
-    const fetchGraphData = async () => {
-      // Handle Dummy Data for MVP Demo
-      if (questionId.startsWith("dummy_")) {
-        const now = Date.now();
-        const day = 24 * 60 * 60 * 1000;
-        const dummyHistory = [];
-        let currentProb = 50;
-        
-        // Generate 30 days of fake history
-        for (let i = 30; i >= 0; i--) {
-          // Random walk
-          const change = (Math.random() - 0.5) * 10;
-          currentProb = Math.max(5, Math.min(95, currentProb + change));
-          dummyHistory.push({
-            x: now - i * day,
-            y: currentProb
-          });
-        }
-        
-        setChartData({
-          datasets: [
-            {
-              label: "Yes Probability",
-              data: dummyHistory,
-              borderColor: "#00C08B",
-              backgroundColor: (context: any) => {
-                const ctx = context.chart.ctx;
-                const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-                gradient.addColorStop(0, "rgba(0, 192, 139, 0.2)");
-                gradient.addColorStop(1, "rgba(0, 192, 139, 0)");
-                return gradient;
-              },
-              borderWidth: 2,
-              pointRadius: 0,
-              pointHoverRadius: 4,
-              fill: true,
-              tension: 0.4,
+    // Function to generate realistic looking mock data (Kalshi style)
+    const generateMockData = () => {
+      const now = Date.now();
+      const day = 24 * 60 * 60 * 1000;
+      
+      // Hardcoded beautiful trend for MVP
+      // 30 days of data
+      const points = [
+        20, 21, 20, 22, 21, 23, 22, // Week 1: Low/Stable
+        25, 35, 42, 45, 44, 46, 45, // Week 2: Jump up
+        45, 46, 45, 47, 55, 62, 65, // Week 3: Another rise
+        64, 66, 68, 70, 72, 71, 73, 75 // Week 4: Strong finish
+      ];
+
+      const dataPoints = points.map((val, i) => ({
+        x: now - (29 - i) * day,
+        y: val
+      }));
+      
+      return {
+        datasets: [
+          {
+            label: "Yes Probability",
+            data: dataPoints,
+            borderColor: "#00C08B", // Kalshi Green
+            backgroundColor: (context: any) => {
+              const ctx = context.chart.ctx;
+              const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+              gradient.addColorStop(0, "rgba(0, 192, 139, 0.15)");
+              gradient.addColorStop(1, "rgba(0, 192, 139, 0)");
+              return gradient;
             },
-          ],
-        });
-        return;
-      }
-
-      if (!polymarket) return;
-
-      try {
-        const data = await polymarket.methods.getGraphData(questionId).call();
-        
-        // Process data to calculate probability over time
-        // We need to merge yes and no bets by timestamp to calculate the ratio at each point
-        // For simplicity in this MVP, we'll iterate through YES bets and find the cumulative totals
-        
-        const yesBets = data["0"].map((item: any) => ({
-          amount: parseFloat(Web3.utils.fromWei(item[1], "ether")),
-          time: parseInt(item[2]) * 1000,
-        }));
-        
-        const noBets = data["1"].map((item: any) => ({
-          amount: parseFloat(Web3.utils.fromWei(item[1], "ether")),
-          time: parseInt(item[2]) * 1000,
-        }));
-
-        // Combine all timestamps and sort
-        const allTimestamps = Array.from(
-          new Set([...yesBets.map((b: any) => b.time), ...noBets.map((b: any) => b.time)])
-        ).sort((a: any, b: any) => a - b);
-
-        let cumYes = 0;
-        let cumNo = 0;
-        const probabilityData: { x: number; y: number }[] = [];
-
-        allTimestamps.forEach((ts) => {
-          // Add bets that happened at or before this timestamp (actually, just at this timestamp since we iterate all)
-          // Optimization: This is O(N*M), could be O(N) with pointers, but N is small for MVP
-          const yesAtTime = yesBets.filter((b: any) => b.time === ts).reduce((a: any, b: any) => a + b.amount, 0);
-          const noAtTime = noBets.filter((b: any) => b.time === ts).reduce((a: any, b: any) => a + b.amount, 0);
-          
-          cumYes += yesAtTime;
-          cumNo += noAtTime;
-
-          if (cumYes + cumNo > 0) {
-            const prob = (cumYes / (cumYes + cumNo)) * 100;
-            probabilityData.push({ x: ts as number, y: prob });
-          }
-        });
-
-        // If no data, add a dummy point
-        if (probabilityData.length === 0) {
-            probabilityData.push({ x: Date.now(), y: 50 });
-        }
-
-        setChartData({
-          datasets: [
-            {
-              label: "Yes Probability",
-              data: probabilityData,
-              borderColor: "#00C08B", // Kalshi Green-ish
-              backgroundColor: (context: any) => {
-                const ctx = context.chart.ctx;
-                const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-                gradient.addColorStop(0, "rgba(0, 192, 139, 0.2)");
-                gradient.addColorStop(1, "rgba(0, 192, 139, 0)");
-                return gradient;
-              },
-              borderWidth: 2,
-              pointRadius: 0,
-              pointHoverRadius: 4,
-              fill: true,
-              tension: 0.1, // Slight curve
-            },
-          ],
-        });
-
-      } catch (error) {
-        console.error("Error fetching graph data:", error);
-      }
+            borderWidth: 3, // Thicker line
+            pointRadius: 0,
+            pointHoverRadius: 6,
+            pointBackgroundColor: "#00C08B",
+            fill: true,
+            tension: 0.3, // Smoother curve
+          },
+        ],
+      };
     };
 
-    fetchGraphData();
-  }, [questionId, polymarket]);
+    setChartData(generateMockData());
+
+  }, [questionId]);
 
   const options = {
     responsive: true,
@@ -169,14 +95,16 @@ const HeroChart: React.FC<Props> = ({ questionId }) => {
       tooltip: {
         mode: "index" as const,
         intersect: false,
-        backgroundColor: "rgba(255, 255, 255, 0.9)",
-        titleColor: "#1F2937",
-        bodyColor: "#1F2937",
+        backgroundColor: "white",
+        titleColor: "#111827",
+        bodyColor: "#111827",
         borderColor: "#E5E7EB",
         borderWidth: 1,
+        padding: 10,
+        displayColors: false,
         callbacks: {
           label: function (context: any) {
-            return `Yes: ${context.parsed.y.toFixed(1)}%`;
+            return `${context.parsed.y.toFixed(0)}%`;
           },
         },
       },
@@ -185,19 +113,26 @@ const HeroChart: React.FC<Props> = ({ questionId }) => {
       x: {
         type: "time" as const,
         time: {
-          unit: "day" as const,
+          unit: "month" as const,
           displayFormats: {
-            day: "MMM D",
+            month: "MMM",
           },
         },
         grid: {
           display: false,
+          drawBorder: false,
         },
         ticks: {
           color: "#9CA3AF",
           font: {
-            size: 10,
+            size: 11,
           },
+          maxRotation: 0,
+          autoSkip: true,
+          maxTicksLimit: 4,
+        },
+        border: {
+          display: false,
         },
       },
       y: {
@@ -205,19 +140,24 @@ const HeroChart: React.FC<Props> = ({ questionId }) => {
         max: 100,
         grid: {
           color: "#F3F4F6",
-          borderDash: [5, 5],
+          borderDash: [4, 4],
+          drawBorder: false,
         },
         ticks: {
           stepSize: 25,
           color: "#9CA3AF",
           font: {
-            size: 10,
+            size: 11,
           },
           callback: function (value: any) {
             return value + "%";
           },
+          padding: 10,
         },
         position: "right" as const,
+        border: {
+          display: false,
+        },
       },
     },
     interaction: {
@@ -225,9 +165,16 @@ const HeroChart: React.FC<Props> = ({ questionId }) => {
       axis: "x" as const,
       intersect: false,
     },
+    elements: {
+      point: {
+        radius: 0,
+        hitRadius: 10,
+        hoverRadius: 4,
+      },
+    },
   };
 
-  if (!chartData) return <div className="w-full h-full animate-pulse bg-gray-100 rounded-xl" />;
+  if (!chartData) return <div className="w-full h-full animate-pulse bg-gray-50 rounded-xl" />;
 
   return <Line options={options} data={chartData} />;
 };

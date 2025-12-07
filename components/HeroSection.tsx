@@ -100,7 +100,7 @@ export const HeroSection: React.FC<Props> = ({ market }) => {
              </span>
         </div>
         <div className="flex-grow w-full min-h-[250px]">
-          <HeroChart questionId={market.id} />
+          <HeroChart key={market.id + "-v2"} questionId={market.id} />
         </div>
       </div>
     </div>
