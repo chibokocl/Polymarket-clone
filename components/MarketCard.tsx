@@ -18,64 +18,37 @@ export const MarketCard: React.FC<MarketProps> = ({
   return (
     <div className="w-full overflow-hidden my-2">
       <Link href={`/market/${id}`} passHref>
-        <div className="flex flex-col h-full card-animate border border-cobalt-soft bg-white/80 rounded-2xl p-4 cursor-pointer backdrop-blur-sm hover:border-cobalt-light shadow-sm">
-          <div className="flex flex-row space-x-4 pb-4 items-center">
-            <div className="w-12 h-w-12 rounded-full bg-cyanbrand-soft flex items-center justify-center overflow-hidden">
+        <div className="flex flex-col h-full bg-white rounded-lg p-3 cursor-pointer hover:shadow-md transition-shadow border border-gray-100">
+          <div className="flex flex-row space-x-3 pb-2 items-start">
+            <div className="w-8 h-8 min-w-[32px] rounded-md bg-gray-100 overflow-hidden relative">
               <Img
                 src={`https://ipfs.infura.io/ipfs/${imageHash}`}
-                className="rounded-full"
-                width={100}
-                height={100}
+                layout="fill"
+                objectFit="cover"
               />
             </div>
-            <div className="flex flex-col space-y-1">
-              <div className="flex items-center space-x-2">
-                <span
-                  className={`text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md ${
-                    CATEGORY_COLORS[category] || "bg-gray-100 text-gray-600"
-                  }`}
-                >
-                  {category}
-                </span>
-              </div>
-              <span className="text-sm font-semibold text-gray-900 leading-snug line-clamp-3">
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold text-gray-900 leading-tight line-clamp-2">
                 {title}
+              </span>
+              <span className="text-[10px] text-gray-400 mt-1">
+                Vol: ${parseFloat(Web3.utils.fromWei(totalAmount, "ether")).toLocaleString(undefined, { maximumFractionDigits: 0 })}
               </span>
             </div>
           </div>
-          <div className="flex flex-row flex-nowrap justify-between items-center mt-auto">
-            <div className="flex flex-col space-y-1">
-              <span className="text-xs text-gray-500 font-light uppercase tracking-wide">
-                Volume
-              </span>
-              <span className="text-sm number-mono text-gray-900">
-                {parseFloat(Web3.utils.fromWei(totalAmount, "ether")).toFixed(
-                  2
-                )}{" "}
-                POLY
+          
+          <div className="mt-auto grid grid-cols-2 gap-2 pt-2">
+            <div className="flex flex-col items-center justify-center p-1.5 rounded bg-green-50 hover:bg-green-100 transition-colors">
+              <span className="text-[10px] uppercase font-bold text-green-700 tracking-wider">Yes</span>
+              <span className="text-sm font-bold text-green-800 number-mono">
+                {parseFloat(Web3.utils.fromWei(totalYes, "ether")).toFixed(2)}
               </span>
             </div>
-            <div className="flex flex-col space-y-1">
-              <span className="text-xs text-gray-500 font-light uppercase tracking-wide">
-                Yes
+            <div className="flex flex-col items-center justify-center p-1.5 rounded bg-blue-50 hover:bg-blue-100 transition-colors">
+              <span className="text-[10px] uppercase font-bold text-blue-700 tracking-wider">No</span>
+              <span className="text-sm font-bold text-blue-800 number-mono">
+                {parseFloat(Web3.utils.fromWei(totalNo, "ether")).toFixed(2)}
               </span>
-              <div className="px-2 py-1 bg-cobalt-soft text-center rounded-full">
-                <span className="text-xs font-semibold text-cobalt number-mono">
-                  {parseFloat(Web3.utils.fromWei(totalYes, "ether")).toFixed(2)}{" "}
-                  POLY
-                </span>
-              </div>
-            </div>
-            <div className="flex flex-col space-y-1">
-              <span className="text-xs text-gray-500 font-light uppercase tracking-wide">
-                No
-              </span>
-              <div className="px-2 py-1 bg-cyanbrand-soft text-center rounded-full">
-                <span className="text-xs font-semibold text-lapis number-mono">
-                  {parseFloat(Web3.utils.fromWei(totalNo, "ether")).toFixed(2)}{" "}
-                  POLY
-                </span>
-              </div>
             </div>
           </div>
         </div>

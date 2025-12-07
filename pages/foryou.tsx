@@ -6,6 +6,7 @@ import { getMarketMetadata } from "../utils/marketMetadata";
 import { HeroSection } from "../components/HeroSection";
 import { MarketCarousel } from "../components/MarketCarousel";
 import { MarketProps } from "./index";
+import Web3 from "web3";
 
 export default function ForYou() {
   const { polymarket, account, loadWeb3, loading } = useData();
@@ -46,17 +47,71 @@ export default function ForYou() {
     });
   }, [loading]);
 
+  // Dummy Data for MVP
+  const dummyMarkets: MarketProps[] = [
+    {
+      id: "dummy_1",
+      title: "Who will Trump nominate as Fed Chair?",
+      imageHash: "QmX5...", // Placeholder, will break image but that's ok or use a public URL if possible. 
+      // Actually, let's use a real IPFS hash from the existing code or a placeholder
+      // Using a known hash from index.tsx or just leaving it to fail gracefully (MarketCard handles it?)
+      // MarketCard uses https://ipfs.infura.io/ipfs/${imageHash}. 
+      // Let's use a valid-looking hash or the component might look broken.
+      // I'll use a random string, the image will be broken but the layout will exist.
+      // Better: Use a placeholder image service if I could, but I can't change the domain in next.config.
+      // I will just use a random hash.
+      totalAmount: Web3.utils.toWei("5868270", "ether"),
+      totalYes: Web3.utils.toWei("1173654", "ether"), // ~20%
+      totalNo: Web3.utils.toWei("4694616", "ether"),
+      category: "Politics",
+      tags: ["Fed", "Trump", "Economy"],
+    },
+    {
+      id: "dummy_2",
+      title: "Will Bitcoin hit $100k in 2024?",
+      imageHash: "QmY...", 
+      totalAmount: Web3.utils.toWei("12500000", "ether"),
+      totalYes: Web3.utils.toWei("8125000", "ether"), // 65%
+      totalNo: Web3.utils.toWei("4375000", "ether"),
+      category: "Crypto",
+      tags: ["Bitcoin", "Price"],
+    },
+    {
+      id: "dummy_3",
+      title: "Super Bowl LIX Winner: Chiefs vs Eagles?",
+      imageHash: "QmZ...",
+      totalAmount: Web3.utils.toWei("3200000", "ether"),
+      totalYes: Web3.utils.toWei("1600000", "ether"), // 50%
+      totalNo: Web3.utils.toWei("1600000", "ether"),
+      category: "Sports",
+      tags: ["NFL", "Super Bowl"],
+    },
+    {
+      id: "dummy_4",
+      title: "Will SpaceX Starship reach orbit in next launch?",
+      imageHash: "QmA...",
+      totalAmount: Web3.utils.toWei("950000", "ether"),
+      totalYes: Web3.utils.toWei("855000", "ether"), // 90%
+      totalNo: Web3.utils.toWei("95000", "ether"),
+      category: "Science",
+      tags: ["SpaceX", "Mars"],
+    }
+  ];
+
   // Derived lists
-  const sortedByVolume = [...markets].sort(
+  // Use dummyMarkets if real markets are empty
+  const activeMarkets = markets.length > 0 ? markets : dummyMarkets;
+
+  const sortedByVolume = [...activeMarkets].sort(
     (a, b) => parseFloat(b.totalAmount) - parseFloat(a.totalAmount)
   );
-  const sortedByNewest = [...markets].sort(
-    (a, b) => parseInt(b.id) - parseInt(a.id)
+  const sortedByNewest = [...activeMarkets].sort(
+    (a, b) => (b.id > a.id ? 1 : -1) // Simple string compare for dummy IDs
   );
   
-  const cryptoMarkets = markets.filter(m => m.category === "Crypto");
-  const politicsMarkets = markets.filter(m => m.category === "Politics");
-  const sportsMarkets = markets.filter(m => m.category === "Sports");
+  const cryptoMarkets = activeMarkets.filter(m => m.category === "Crypto");
+  const politicsMarkets = activeMarkets.filter(m => m.category === "Politics");
+  const sportsMarkets = activeMarkets.filter(m => m.category === "Sports");
 
   // Featured market: Highest volume or specific ID
   const featuredMarket = sortedByVolume[0];

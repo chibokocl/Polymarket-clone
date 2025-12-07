@@ -39,6 +39,48 @@ const HeroChart: React.FC<Props> = ({ questionId }) => {
 
   useEffect(() => {
     const fetchGraphData = async () => {
+      // Handle Dummy Data for MVP Demo
+      if (questionId.startsWith("dummy_")) {
+        const now = Date.now();
+        const day = 24 * 60 * 60 * 1000;
+        const dummyHistory = [];
+        let currentProb = 50;
+        
+        // Generate 30 days of fake history
+        for (let i = 30; i >= 0; i--) {
+          // Random walk
+          const change = (Math.random() - 0.5) * 10;
+          currentProb = Math.max(5, Math.min(95, currentProb + change));
+          dummyHistory.push({
+            x: now - i * day,
+            y: currentProb
+          });
+        }
+        
+        setChartData({
+          datasets: [
+            {
+              label: "Yes Probability",
+              data: dummyHistory,
+              borderColor: "#00C08B",
+              backgroundColor: (context: any) => {
+                const ctx = context.chart.ctx;
+                const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+                gradient.addColorStop(0, "rgba(0, 192, 139, 0.2)");
+                gradient.addColorStop(1, "rgba(0, 192, 139, 0)");
+                return gradient;
+              },
+              borderWidth: 2,
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              fill: true,
+              tension: 0.4,
+            },
+          ],
+        });
+        return;
+      }
+
       if (!polymarket) return;
 
       try {
