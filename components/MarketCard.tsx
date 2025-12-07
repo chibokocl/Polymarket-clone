@@ -38,14 +38,12 @@ export const MarketCard: React.FC<MarketProps> = ({
                 }}
               />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col flex-1 min-w-0">
               <span className="text-sm font-semibold text-gray-900 leading-tight line-clamp-2">
                 {title}
               </span>
 
-
-
-              <span className="text-[10px] text-gray-400 mt-1">
+              <span className="text-[10px] text-gray-400 mt-1 whitespace-nowrap">
                 Vol: {formatCurrency(totalAmountNum)}
               </span>
             </div>
